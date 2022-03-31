@@ -1,15 +1,22 @@
 FROM ubuntu:xenial
 WORKDIR /opt/chimera/bin
-COPY ./run.sh ./run.sh
+COPY ./crontab ./run.sh ./entrypoint.sh ./
 RUN apt-get update &&\
     apt-get install -y curl &&\
     apt-get install -y jq &&\
+    apt-get install -y cron &&\
+    apt-get clean &&\ 
     mkdir /var/log/chimera &&\
+    chmod +x ./entrypoint.sh &&\
     chmod +x ./run.sh &&\
     curl https://devops-command-line-workshop.s3.eu-west-2.amazonaws.com/cliapp --output cliapp &&\
-    chmod +x cliapp
+    chmod +x cliapp &&\
+    touch /var/log/cron.log &&\
+    crontab crontab
 
 # The data folder should be shared with the webapp
 ENV DATA_FOLDER=/opt/chimera/data
 
-ENTRYPOINT ["./run.sh"]
+ENTRYPOINT ["./entrypoint.sh"]
+
+

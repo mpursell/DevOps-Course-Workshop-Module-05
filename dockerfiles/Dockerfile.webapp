@@ -4,6 +4,7 @@ WORKDIR /opt/chimera/bin
 
 RUN apt-get update &&\
     apt-get install -y curl &&\
+    apt-get clean &&\ 
     curl https://devops-command-line-workshop.s3.eu-west-2.amazonaws.com/webapp --output webapp &&\
     chmod +x webapp &&\
     mkdir /var/log/chimera

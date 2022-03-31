@@ -1,0 +1,39 @@
+services:
+
+  chimera-nginx:
+    image: nginx
+    container_name: chimera-nginx
+    ports:
+      - 8080:80
+
+  chimera-redis:
+    image: redis
+    container_name: chimera-redis
+    ports:
+      - 6379:6379
+
+  cliapp:
+    build: 
+      context: ./dockerfiles
+      dockerfile: Dockerfile.cliapp
+    image: chimera-cliapp:v3
+    container_name: chimera-cliapp
+    environment:
+      - REDIS_PORT=6379
+      - REDIS_HOST=chimera-redis
+    
+
+  webapp:
+    build: 
+      context: ./dockerfiles
+      dockerfile: Dockerfile.webapp
+    image: chimera-webapp:v3
+    container_name: chimera-webapp
+    ports:
+      - 9000:9000
+    environment:
+      - REDIS_PORT=6379
+      - REDIS_HOST=chimera-redis
+
+
+
